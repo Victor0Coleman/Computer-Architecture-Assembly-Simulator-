@@ -1,10 +1,11 @@
 #include "Simulator.h"
+#include "encoder.h"    // This include only need to exist while encoding is on the chip. Bad, but temporary. Hopefully ~
 #include <iostream>
 #include <sstream>
 
 Simulator::Simulator(bool debugMode) : pc(0), debug(debugMode) {}
 
-void Simulator::loadProgram(const std::vector<std::string>& instructions) {
+void Simulator::loadProgram(const std::vector<uint32_t>& instructions) {
     program = instructions;
 }
 
@@ -46,13 +47,46 @@ void Simulator::stageIF() {
         ifid.pc = pc;
         pc++;
     } else {
-        ifid.instruction = "NOP";
+        ifid.instruction = 0;
     }
 }
 
 void Simulator::stageID() {
-    // Person 2's job — decode ifid.instruction
-    // and fill in idex fields
+
+    // Encoding has moved off the chip. Huzzah.
+
+    // Decode
+    // Filter out no-op outside of switch (just for less clutter)
+    if(ifid.instruction == 0){
+        idex = ID_EX();
+        return;
+    }
+
+    // All values will be populated... not all will be used.    Choose which to use based on idex.type.
+    idex.opcode = (ifid.instruction >> 26) & 0x3F;
+    idex.rs     = (ifid.instruction >> 21) & 0x1F;
+    idex.rt     = (ifid.instruction >> 16) & 0x1F;
+    idex.rd     = (ifid.instruction >> 11) & 0x1F;
+    idex.shamt  = (ifid.instruction >> 06) & 0x1F;
+    idex.funct  = (ifid.instruction >> 00) & 0x3F;
+    
+    int16_t intermediate_immediate = ifid.instruction & 0x0000FFFF;
+    idex.immediate = (int32_t)intermediate_immediate; // auto extend?
+    idex.jump_offset = ifid.instruction & 0x03FFFFFF;
+
+    idex.readData1 = regFile.read(idex.rs);
+    idex.readData2 = regFile.read(idex.rt);
+
+    idex.type
+        = idex.opcode == 0 ? idex.R
+        : idex.opcode == 2 ? idex.J
+        : idex.I;  // NOP filtered out already. However, if NOP was read as R-type, it would make no difference to correctness...probably?
+    
+
+    // Here will be assigning values for signals based on relevant codes. 
+    // TODO.
+    
+
 }
 
 void Simulator::stageEX() {

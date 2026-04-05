@@ -7,10 +7,10 @@
 // Sits between Fetch and Decode
 // IF fetches the instruction and passes it here
 struct IF_ID {
-    std::string instruction;  // the raw instruction string e.g. "ADD $t0 $t1 $t2"
+    uint32_t instruction;     // the raw instruction as a binary string
     int pc;                   // the PC value when this instruction was fetched
 
-    IF_ID() : instruction("NOP"), pc(0) {}
+    IF_ID() : instruction(0), pc(0) {}
 };
 
 // ─── ID/EX ───────────────────────────────────────────
@@ -22,13 +22,18 @@ struct ID_EX {
     int readData2;      // value of $rt
 
     int immediate;      // sign-extended immediate value
+    int jump_offset;     // 26-bit offset for jumps
+
+    enum Type{R, I, J, NOP} type;   
 
     // register numbers (needed later for writeback)
     int rs;             // source register number
     int rt;             // source/dest register number
     int rd;             // destination register number (R-type)
+    int shamt;          // shift amount (R-type)
+    int funct;           // function code (R-type)
 
-    std::string opcode; // e.g. "ADD", "LW", "BEQ"
+    int opcode; // This is now a number opcode.
 
     // control signals
     bool regDst;        // 1 = write to rd, 0 = write to rt
@@ -38,8 +43,8 @@ struct ID_EX {
     bool regWrite;      // 1 = this instruction writes to a register
     bool memToReg;      // 1 = writeback comes from memory, 0 = from ALU
 
-    ID_EX() : readData1(0), readData2(0), immediate(0),
-              rs(0), rt(0), rd(0), opcode("NOP"),
+    ID_EX() : readData1(0), readData2(0), immediate(0), type(NOP),
+              rs(0), rt(0), rd(0), shamt(0), funct(0), opcode(0),
               regDst(false), aluSrc(false), memRead(false),
               memWrite(false), regWrite(false), memToReg(false) {}
 };

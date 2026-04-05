@@ -3,8 +3,11 @@
 #include <vector>
 #include <string>
 #include "Simulator.h"
+#include "Assembler.h"
 
 int main(int argc, char* argv[]) {
+    std::string binPath = "instructions.bin";
+
     if (argc < 2) {
         std::cout << "Usage: ./mips-sim <input.asm> [-d]\n";
         return 1;
@@ -23,13 +26,30 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::vector<std::string> instructions;
-    std::string line;
-    while (std::getline(file, line)) {
-        // skip empty lines and comments
-        if (line.empty() || line[0] == '#') continue;
-        instructions.push_back(line);
+    Assembler s;
+    s.assemble(argv[1], binPath);
+    std::vector<uint32_t> instructions;
+
+    std::ifstream bin_file(binPath, std::ios::binary);
+    if (!bin_file.is_open()) {
+        std::cerr << "Failed to open input file";
+        return 1;
     }
+
+    while(bin_file.good()){
+        char memblock[4];
+        while (bin_file.read(memblock, 4)){
+            uint32_t a = 0;
+            for(int i = 0; i < 4; ++i){
+                a = (a<<8) | (static_cast<unsigned int>(memblock[i]) & 0xff);
+            }
+
+            instructions.push_back(a);
+            // std::cout << "main: " << std::hex << a << "\n";      // old line for verifying binary file read properly
+        }
+
+    }
+
 
     // run the simulator
     Simulator sim(debug);

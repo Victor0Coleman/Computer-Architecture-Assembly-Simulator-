@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <cstdint>
 #include "RegisterFile.h"
 #include "Memory.h"
 #include "PipelineRegisters.h"
@@ -11,7 +12,7 @@ class Simulator {
 public:
     Simulator(bool debugMode);
 
-    void loadProgram(const std::vector<std::string>& instructions);
+    void loadProgram(const std::vector<uint32_t>& instructions);
     void run();
 
 private:
@@ -26,7 +27,7 @@ private:
     MEM_WB  memwb;
 
     // the program — list of instruction strings
-    std::vector<std::string> program;
+    std::vector<uint32_t> program;
 
     // program counter — tracks which instruction to fetch next
     int pc;
