@@ -53,9 +53,9 @@ struct ID_EX {
 // Sits between Execute and Memory
 // EX runs the ALU and passes results here
 struct EX_MEM {
-    int aluResult;      // result of the ALU operation
-    int writeData;      // value of $rt (used by SW to store to memory)
-    int destReg;        // which register to write back to
+    int32_t aluResult;      // result of the ALU operation
+    int32_t writeData;      // value of $rt (used by SW to store to memory)
+    int32_t destReg;        // which register to write back to
 
     // control signals (passed through from ID/EX)
     bool memRead;
