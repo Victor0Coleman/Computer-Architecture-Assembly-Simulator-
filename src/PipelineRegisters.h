@@ -11,12 +11,17 @@ struct IF_ID {
     int pc;                   // the PC value when this instruction was fetched
 
     IF_ID() : instruction(0), pc(0) {}
+    void clear() {*this = IF_ID();
 };
 
 // ─── ID/EX ───────────────────────────────────────────
 // Sits between Decode and Execute
 // ID decodes the instruction and passes everything EX needs here
 struct ID_EX {
+    std::string type;   // instruction type (R, I, J, and "NOP")
+    std::string instruction;  // the raw instruction string e.g. "ADD $t0 $t1 $t2"
+
+    int pc;             // PC value when this instruction was fetched
     // register values read during decode
     int readData1;      // value of $rs
     int readData2;      // value of $rt
@@ -42,6 +47,7 @@ struct ID_EX {
     bool memWrite;      // 1 = this instruction writes memory (SW)
     bool regWrite;      // 1 = this instruction writes to a register
     bool memToReg;      // 1 = writeback comes from memory, 0 = from ALU
+    bool valid;
 
     ID_EX() : readData1(0), readData2(0), immediate(0), type(NOP),
               rs(0), rt(0), rd(0), shamt(0), funct(0), opcode(0),
@@ -66,6 +72,8 @@ struct EX_MEM {
     EX_MEM() : aluResult(0), writeData(0), destReg(0),
                memRead(false), memWrite(false),
                regWrite(false), memToReg(false) {}
+
+               void clear() {*this = EX_MEM();}
 };
 
 // ─── MEM/WB ──────────────────────────────────────────
@@ -80,8 +88,12 @@ struct MEM_WB {
     bool regWrite;      // 1 = write result back to register file
     bool memToReg;      // 1 = write memory data, 0 = write ALU result
 
+    bool valid;
+
     MEM_WB() : aluResult(0), readData(0), destReg(0),
                regWrite(false), memToReg(false) {}
+
+    void clear() {*this = MEM_WB();}
 };
 
 #endif
