@@ -38,7 +38,7 @@ struct ID_EX {
     int rd;             // destination register number (R-type)
 
     std::string opcode; // e.g. "ADD", "LW", "BEQ"
-    std::string funct;  // e.g. "ADD", "SUB", "AND"
+    std::string funct;  // e.g. For separating opcode and funct
 
     // control signals
     bool regDst;        // 1 = write to rd, 0 = write to rt
