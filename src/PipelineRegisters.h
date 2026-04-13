@@ -12,7 +12,7 @@ struct IF_ID {
     bool valid;               // the difference b/w real instruction and false one (NOP)
     IF_ID() : instruction("NOP"), pc(0), valid(false) {}
 
-    void clear() {*this = IF_ID();
+    void clear() {*this = IF_ID(); //replaces curr object with default IF_ID
     }
 };
 
@@ -73,7 +73,7 @@ struct EX_MEM {
                memRead(false), memWrite(false),
                regWrite(false), memToReg(false) {}
 
-               void clear() {*this = EX_MEM();}
+               void clear() {*this = EX_MEM();} //replaces curr object with default EX_MEM
 };
 
 // ─── MEM/WB ──────────────────────────────────────────
@@ -93,7 +93,7 @@ struct MEM_WB {
     MEM_WB() : aluResult(0), readData(0), destReg(0),
                regWrite(false), memToReg(false) {}
 
-    void clear() {*this = MEM_WB();}
+    void clear() {*this = MEM_WB();} //replaces curr object with default MEM_WB
 };
 
 #endif
