@@ -19,9 +19,6 @@ struct IF_ID {
 // Sits between Decode and Execute
 // ID decodes the instruction and passes everything EX needs here
 struct ID_EX {
-    std::string type;   // instruction type (R, I, J, and "NOP")
-    std::string instruction;  // the raw instruction string e.g. "ADD $t0 $t1 $t2"
-
     int pc;             // PC value when this instruction was fetched
     // register values read during decode
     int readData1;      // value of $rs
