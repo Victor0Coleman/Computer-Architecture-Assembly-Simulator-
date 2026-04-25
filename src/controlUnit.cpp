@@ -26,29 +26,26 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
     else if(idex.opcode == idex.J){
         //nothing happens
     }
-    
-    else if(op == "addi"){
-        idex.aluSrc = true;
-        idex.regWrite = true;
-    }
-//SW
-    else if(op == "sw"){
-        idex.aluSrc = true;
-        idex.regWrite = true;
-    }
-//LW
-    else if(op == "lw"){
-        idex.aluSrc = true;
-        idex.memRead = true;
-        idex.regWrite = true;
-        idex.memToReg = true;
-    }
+
+    else if(idex.opcode == idex.I){
+
+        if(idex.op == "addi"){
+            idex.aluSrc = true;
+            idex.regWrite = true;
+        }
+        //SW
+        else if(op == "sw"){
+            idex.aluSrc = true;
+            idex.regWrite = true;
+        }
+        //LW
+        else if(op == "lw"){
+            idex.aluSrc = true;
+            idex.memRead = true;
+            idex.regWrite = true;
+            idex.memToReg = true;
+        }
 
     }
-//SW
-    else if(){
-
-    }
-
 
 }
