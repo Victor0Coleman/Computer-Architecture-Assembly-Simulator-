@@ -29,17 +29,17 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
 
     else if(idex.type == idex.I){
 
-        if(idex.op == "addi"){
+        if(idex.opcode == opcodeMap.at("addi")){
             idex.aluSrc = true;
             idex.regWrite = true;
         }
         //SW
-        else if(op == "sw"){
+        else if(op == opcodeMap.at("sw")){
             idex.aluSrc = true;
             idex.regWrite = true;
         }
         //LW
-        else if(op == "lw"){
+        else if(op == opcodeMap.at("lw")){
             idex.aluSrc = true;
             idex.memRead = true;
             idex.regWrite = true;
