@@ -11,30 +11,37 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
     idex.regWrite = false;
     idex.memToReg = false;
 
+//NOP
+    if(idex.type == idex.NOP){
+        // What to do with NOP.
+    }
+
+
 //R-type 
-    if(op == "add"||op == "or" || op == "and"){
-        reg.regDst = true;
-        reg.regWrite = true;
+    else if(idex.opcode == idex.R){
+        idex.regDst = true;
+        idex.regWrite = true;
     }
 //J-type
-    else if(op == "j"){
+    else if(idex.opcode == idex.J){
         //nothing happens
     }
+    
     else if(op == "addi"){
-        reg.aluSrc = true;
-        reg.regWrite = true;
+        idex.aluSrc = true;
+        idex.regWrite = true;
     }
 //SW
     else if(op == "sw"){
-        reg.aluSrc = true;
-        reg.regWrite = true;
+        idex.aluSrc = true;
+        idex.regWrite = true;
     }
 //LW
     else if(op == "lw"){
-        reg.aluSrc = true;
-        reg.memRead = true;
-        reg.regWrite = true;
-        reg.memToReg = true;
+        idex.aluSrc = true;
+        idex.memRead = true;
+        idex.regWrite = true;
+        idex.memToReg = true;
     }
 
     }
