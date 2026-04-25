@@ -18,16 +18,16 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
 
 
 //R-type 
-    else if(idex.opcode == idex.R){
+    else if(idex.type == idex.R){
         idex.regDst = true;
         idex.regWrite = true;
     }
 //J-type
-    else if(idex.opcode == idex.J){
+    else if(idex.type == idex.J){
         //nothing happens
     }
 
-    else if(idex.opcode == idex.I){
+    else if(idex.type == idex.I){
 
         if(idex.op == "addi"){
             idex.aluSrc = true;
