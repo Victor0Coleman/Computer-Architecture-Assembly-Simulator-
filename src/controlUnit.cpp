@@ -1,6 +1,6 @@
 #include "controlUnit.h"
 
-void ControlUnit::setsignals(const std::string& op, ID_EX& reg) {
+void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
     // Implementation of the function
 
  //reset everything since compulsory miss upon start.
