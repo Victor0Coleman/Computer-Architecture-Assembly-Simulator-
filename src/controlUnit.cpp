@@ -15,18 +15,19 @@ void ControlUnit::setsignals(ID_EX& idex) {
 
 //NOP
     if(idex.type == idex.NOP){
-        // What to do with NOP.
+        // Do nothing.
     }
 
 
-//R-type 
+    //R-type 
     else if(idex.type == idex.R){
         idex.regDst = true;
         idex.regWrite = true;
     }
-//J-type
+
+    //J-type
     else if(idex.type == idex.J){
-        // Do nothing?
+        // This may need a signal. One doesn't exist yet.
     }
 
     else if(idex.type == idex.I){
@@ -49,7 +50,7 @@ void ControlUnit::setsignals(ID_EX& idex) {
         }
         //BEQ
         else if(op == opcodeMap.at("beq")){
-            // Do nothing?
+            // This may need a signal. One doesn't exist yet.
         }
 
     }
