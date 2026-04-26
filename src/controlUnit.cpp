@@ -24,7 +24,7 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
     }
 //J-type
     else if(idex.type == idex.J){
-        //nothing happens
+        // Do nothing?
     }
 
     else if(idex.type == idex.I){
@@ -44,6 +44,10 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
             idex.memRead = true;
             idex.regWrite = true;
             idex.memToReg = true;
+        }
+        //BEQ
+        else if(op == opcodeMap.at("beq")){
+            // Do nothing?
         }
 
     }
