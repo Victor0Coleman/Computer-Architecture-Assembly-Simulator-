@@ -2,6 +2,7 @@
 #define PIPELINEREGISTERS_H
 
 #include <string>
+#include <cstdint>
 
 // ─── IF/ID ───────────────────────────────────────────
 // Sits between Fetch and Decode
