@@ -50,7 +50,7 @@ void ControlUnit::setsignals(ID_EX& idex) {
         }
         //BEQ
         else if(op == opcodeMap.at("beq")){
-            // This may need a signal. One doesn't exist yet.
+            idex.branch = true;
         }
 
     }
