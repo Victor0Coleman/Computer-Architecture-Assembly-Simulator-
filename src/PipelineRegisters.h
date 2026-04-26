@@ -45,7 +45,7 @@ struct ID_EX {
     bool memWrite;      // 1 = this instruction writes memory (SW)
     bool regWrite;      // 1 = this instruction writes to a register
     bool memToReg;      // 1 = writeback comes from memory, 0 = from ALU
-    bool valid;
+
 
     ID_EX() : readData1(0), readData2(0), immediate(0), type(NOP),
               rs(0), rt(0), rd(0), shamt(0), funct(0), opcode(0),
