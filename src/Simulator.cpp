@@ -1,5 +1,6 @@
 #include "Simulator.h"
 #include "encoder.h"    // This include only need to exist while encoding is on the chip. Bad, but temporary. Hopefully ~
+#include "controlUnit.h"
 #include <iostream>
 #include <sstream>
 
@@ -85,7 +86,7 @@ void Simulator::stageID() {
 
     // Here will be assigning values for signals based on relevant codes. 
     // TODO.
-    
+    ControlUnit::setsignals(idex);
 
 }
 
