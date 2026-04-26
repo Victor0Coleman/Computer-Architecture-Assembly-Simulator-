@@ -9,9 +9,9 @@ static const std::string regNames[32] = {
     "$t8","$t9","$k0","$k1","$gp","$sp","$fp","$ra"
 };
 
-RegisterFile::RegisterFile(){
-    reset();
-}
+// RegisterFile::RegisterFile(){
+//     reset();
+// }
 
 RegisterFile::RegisterFile() {
     regs.fill(0);

@@ -13,7 +13,7 @@ public:
     void write(int regNum, int value);
 
     void dump() const;
-    void reset(); // Resets all registers
+    // void reset(); // Resets all registers
 
 private:
     std::array<int, 32> regs;
