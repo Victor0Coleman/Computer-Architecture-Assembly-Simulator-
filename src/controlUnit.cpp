@@ -1,6 +1,6 @@
 #include "controlUnit.h"
 
-void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
+void ControlUnit::setsignals(ID_EX& idex) {
     // Implementation of the function
 
  //reset everything since compulsory miss upon start.
@@ -10,6 +10,8 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
     idex.memWrite = false;
     idex.regWrite = false;
     idex.memToReg = false;
+
+    uint32_t op = idex.opcode;
 
 //NOP
     if(idex.type == idex.NOP){
@@ -29,7 +31,7 @@ void ControlUnit::setsignals(uint32_t op, ID_EX& idex) {
 
     else if(idex.type == idex.I){
 
-        if(idex.opcode == opcodeMap.at("addi")){
+        if(op == opcodeMap.at("addi")){
             idex.aluSrc = true;
             idex.regWrite = true;
         }
