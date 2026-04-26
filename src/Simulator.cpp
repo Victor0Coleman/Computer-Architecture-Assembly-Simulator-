@@ -88,6 +88,19 @@ void Simulator::stageID() {
     // TODO.
     ControlUnit::setsignals(idex);
 
+    // signal monitor. Commented out.
+
+/*//
+    std::cout 
+        << "regDst: " << idex.regDst << "\n"
+        << "aluSrc: " << idex.aluSrc << "\n"
+        << "memRead: " << idex.memRead << "\n"
+        << "memWrite: " << idex.memWrite << "\n"
+        << "regWrite: " << idex.regWrite << "\n"
+        << "memToReg: " << idex.memToReg << "\n"
+        << "branch: " << idex.branch << "\n";
+//*/
+
 }
 
 void Simulator::stageEX() {
