@@ -39,7 +39,7 @@ void ControlUnit::setsignals(ID_EX& idex) {
         //SW
         else if(op == opcodeMap.at("sw")){
             idex.aluSrc = true;
-            idex.regWrite = true;
+            idex.memWrite = true;
         }
         //LW
         else if(op == opcodeMap.at("lw")){
