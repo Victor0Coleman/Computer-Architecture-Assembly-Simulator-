@@ -103,6 +103,7 @@ void Simulator::stageID() {
         << "regWrite: " << idex.regWrite << "\n"
         << "memToReg: " << idex.memToReg << "\n"
         << "branch: " << idex.branch << "\n"
+        << "ALUOp: " << (int)idex.ALUOp << "\n"      // this will just be some number (its enum)
         << "----------------------------" << "\n";
         
 //*/

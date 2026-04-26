@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdint>
+#include "Opcode.h"
 
 // ─── IF/ID ───────────────────────────────────────────
 // Sits between Fetch and Decode
@@ -47,11 +48,12 @@ struct ID_EX {
     bool regWrite;      // 1 = this instruction writes to a register
     bool memToReg;      // 1 = writeback comes from memory, 0 = from ALU
     bool branch;        // 1 = branch instruction
+    Opcode ALUOp;       // Not an "Opcode" per-se; merely represent an operation for ALU to perform
 
     ID_EX() : readData1(0), readData2(0), immediate(0), type(NOP),
               rs(0), rt(0), rd(0), shamt(0), funct(0), opcode(0),
               regDst(false), aluSrc(false), memRead(false), memWrite(false),
-              regWrite(false), memToReg(false), branch(false) {}
+              regWrite(false), memToReg(false), branch(false), ALUOp(Opcode::NOP) {}
 };
 
 // ─── EX/MEM ──────────────────────────────────────────
