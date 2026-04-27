@@ -6,9 +6,24 @@
 */
 
 //list of the operation names in the assignment. 
+#ifndef OPCODE_H
+#define OPCODE_H
+
 enum class Opcode {
-    ADD, ADDI, SUB, MUL,
-    AND, OR,
-    SLL, SRL,
-    LW, SW, BEQ, J, NOP
+    ADDI,
+    MUL,
+    SLL,
+    SRL,
+    ADD,
+    SUB,
+    AND,
+    OR,
+    SLT,
+    LW,
+    SW,
+    BEQ,
+    J,
+    NOP
 };
+
+#endif // OPCODE_H
