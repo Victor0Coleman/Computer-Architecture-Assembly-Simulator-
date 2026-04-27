@@ -60,6 +60,9 @@ struct ID_EX {
               regDst(false), aluSrc(false), memRead(false), memWrite(false),
               regWrite(false), memToReg(false), branch(false), ALUOp(Opcode::NOP) {}
 
+    // add a clear
+    void clear() { *this = ID_EX(); }
+
     // NOP shall be the empty instruction
     bool isEmpty() { return !valid; }
 };
@@ -70,6 +73,7 @@ struct ID_EX {
 struct EX_MEM {
     bool valid;               // instruction fetched Propagated?
 
+    bool zero;          // zero from ALU operation
     int aluResult;      // result of the ALU operation
     int writeData;      // value of $rt (used by SW to store to memory)
     int destReg;        // which register to write back to
@@ -80,7 +84,7 @@ struct EX_MEM {
     bool regWrite;
     bool memToReg;
 
-    EX_MEM() : valid(0), aluResult(0), writeData(0), destReg(0),
+    EX_MEM() : valid(0), zero(false), aluResult(0), writeData(0), destReg(0),
                memRead(false), memWrite(false),
                regWrite(false), memToReg(false) {}
 
