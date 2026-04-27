@@ -111,8 +111,30 @@ void Simulator::stageID() {
 }
 
 void Simulator::stageEX() {
-    // Person 3's job — read idex fields
-    // run ALU and fill in exmem fields
+    // double check nop
+    if (idex.type == ID_EX::NOP) {
+        exmem.clear();
+        return;
+    }
+
+    // add alu args and result
+    int operandA = idex.readData1;
+    int operandB = idex.aluSrc ? idex.immediate : idex.readData2;
+    
+    ALUResult aluResult = alu.execute(idex.ALUOp, operandA, operandB);
+
+    // store ALU outputs
+    exmem.aluResult = aluResult.value;
+    exmem.writeData = idex.readData2;   // used for SW
+
+    // pass control signals forward
+    exmem.memRead  = idex.memRead;
+    exmem.memWrite = idex.memWrite;
+    exmem.regWrite = idex.regWrite;
+    exmem.memToReg = idex.memToReg;
+
+    // choose destination register
+    exmem.destReg = idex.regDst ? idex.rd : idex.rt;
 }
 
 void Simulator::stageMEM() {
