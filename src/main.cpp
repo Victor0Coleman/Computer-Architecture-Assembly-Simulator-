@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "Simulator.h"
-#include "Assembler.h"
+#include "assembler.h"
 
 int main(int argc, char* argv[]) {
     std::string binPath = "instructions.bin";
