@@ -147,35 +147,47 @@ void Simulator::stageID() {
 }
 
 void Simulator::stageEX() {
-    exmem.valid = idex.valid;
-    if(!exmem.valid)
-        return;
+    exmem = EX_MEM();
 
-    // double check nop
-    if (idex.type == ID_EX::NOP) {
-        exmem.clear();
-        exmem.valid = true;
+    if (idex.isEmpty()) {
         return;
     }
 
-    // add alu args and result
-    int operandA = idex.readData1;
-    int operandB = idex.aluSrc ? idex.immediate : idex.readData2;
+    exmem.valid = true;
+
+    //grab b input and run
+    int aluA = idex.readData1;
+    int aluB = idex.aluSrc ? idex.immediate : idex.readData2;
     
-    ALUResult aluResult = alu.execute(idex.ALUOp, operandA, operandB);
+    ALUResult aluOut = alu.execute(idex.ALUOp, aluA, aluB);
 
-    // store ALU outputs
-    exmem.aluResult = aluResult.value;
-    exmem.writeData = idex.readData2;   // used for SW
+    //store outputs
+    exmem.aluResult = aluOut.value;
+    exmem.zero      = aluOut.zero;
+    exmem.writeData = idex.readData2;
 
-    // pass control signals forward
+    //destination register
+    exmem.destReg = idex.regDst ? idex.rd : idex.rt;
+
+    //pass control signals forward
     exmem.memRead  = idex.memRead;
     exmem.memWrite = idex.memWrite;
     exmem.regWrite = idex.regWrite;
     exmem.memToReg = idex.memToReg;
 
-    // choose destination register
-    exmem.destReg = idex.regDst ? idex.rd : idex.rt;
+    //beq handling
+    if (idex.branch && aluOut.zero) {
+        //updates pc to branch target
+        pc = idex.pc + 1 + idex.immediate;
+
+        //flush
+        ifid.clear();
+        idex.clear();
+
+        if (debug) {
+            std::cout << "[EX] BEQ taken → PC = " << pc << "\n";
+        }
+    }
 }
 
 void Simulator::stageMEM() {
