@@ -39,9 +39,14 @@ ALUResult ALU::execute(Opcode op, int a, int b) {
             res.value = static_cast<unsigned int>(a) >> b;
             break;
 
+
         case Opcode::BEQ:
             res.value = a - b;
             break;
+
+        case Opcode::J:
+            // do nothing but add this line so it runs
+            // maybe pretend a nop got passed forward
 
         case Opcode::NOP:
             res.value = 0;

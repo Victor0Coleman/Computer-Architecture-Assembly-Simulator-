@@ -9,18 +9,23 @@
 // Sits between Fetch and Decode
 // IF fetches the instruction and passes it here
 struct IF_ID {
+    bool valid;               // instruction fetched Propagated?   
     uint32_t instruction;     // the raw instruction as a binary string
     int pc;                   // the PC value when this instruction was fetched
 
-    IF_ID() : instruction(0), pc(0) {}
+    IF_ID() : valid(false), instruction(0), pc(0) {}
     void clear() {*this = IF_ID(); //replaces curr object with default IF_ID
     }
+
+    bool isEmpty(){ return !valid; }
 };
 
 // ─── ID/EX ───────────────────────────────────────────
 // Sits between Decode and Execute
 // ID decodes the instruction and passes everything EX needs here
 struct ID_EX {
+    bool valid;               // instruction fetched Propagated?
+
     int pc;             // PC value when this instruction was fetched
     // register values read during decode
     int readData1;      // value of $rs
@@ -50,16 +55,21 @@ struct ID_EX {
     bool branch;        // 1 = branch instruction
     Opcode ALUOp;       // Not an "Opcode" per-se; merely represent an operation for ALU to perform
 
-    ID_EX() : readData1(0), readData2(0), immediate(0), type(NOP),
+    ID_EX() : valid(false), readData1(0), readData2(0), immediate(0), type(NOP),
               rs(0), rt(0), rd(0), shamt(0), funct(0), opcode(0),
               regDst(false), aluSrc(false), memRead(false), memWrite(false),
               regWrite(false), memToReg(false), branch(false), ALUOp(Opcode::NOP) {}
+
+    // NOP shall be the empty instruction
+    bool isEmpty() { return !valid; }
 };
 
 // ─── EX/MEM ──────────────────────────────────────────
 // Sits between Execute and Memory
 // EX runs the ALU and passes results here
 struct EX_MEM {
+    bool valid;               // instruction fetched Propagated?
+
     int aluResult;      // result of the ALU operation
     int writeData;      // value of $rt (used by SW to store to memory)
     int destReg;        // which register to write back to
@@ -70,17 +80,23 @@ struct EX_MEM {
     bool regWrite;
     bool memToReg;
 
-    EX_MEM() : aluResult(0), writeData(0), destReg(0),
+    EX_MEM() : valid(0), aluResult(0), writeData(0), destReg(0),
                memRead(false), memWrite(false),
                regWrite(false), memToReg(false) {}
 
-               void clear() {*this = EX_MEM();} //replaces curr object with default EX_MEM
+    void clear() {*this = EX_MEM();} //replaces curr object with default EX_MEM
+
+    // return if this pipeline register is empty. assume default state is false for all
+    bool isEmpty() {return !valid; } 
+
 };
 
 // ─── MEM/WB ──────────────────────────────────────────
 // Sits between Memory and Writeback
 // MEM accesses memory and passes results here
 struct MEM_WB {
+    bool valid;               // instruction fetched Propagated?
+
     int aluResult;      // passed through for non-memory instructions
     int readData;       // data read from memory (used by LW)
     int destReg;        // which register to write back to
@@ -89,12 +105,13 @@ struct MEM_WB {
     bool regWrite;      // 1 = write result back to register file
     bool memToReg;      // 1 = write memory data, 0 = write ALU result
 
-    bool valid;
-
-    MEM_WB() : aluResult(0), readData(0), destReg(0),
+    MEM_WB() : valid(0), aluResult(0), readData(0), destReg(0),
                regWrite(false), memToReg(false) {}
 
     void clear() {*this = MEM_WB();} //replaces curr object with default MEM_WB
+
+    // return if this pipeline register is empty. assume default state is false for all
+    bool isEmpty() {return !valid; } 
 };
 
 #endif

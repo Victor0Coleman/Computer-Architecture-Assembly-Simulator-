@@ -13,9 +13,13 @@ void Simulator::loadProgram(const std::vector<uint32_t>& instructions) {
 void Simulator::run() {
     // keep running until pc has passed all instructions
     // and the pipeline is drained (no instruction in any stage)
-    int totalCycles = program.size() + 4; // 4 extra cycles to drain pipeline
+    
+    // commented out because there is no upper bound on #instructions
+    // int totalCycles = program.size() + 4; // 4 extra cycles to drain pipeline
 
-    for (int cycle = 1; cycle <= totalCycles; cycle++) {
+    int cycle = 0;
+
+    for (;;) {
         if (debug) {
             std::cout << "\n========== CYCLE " << cycle << " ==========\n";
         }
@@ -31,7 +35,22 @@ void Simulator::run() {
         if (debug) {
             printState();
         }
+
+        // Loop end condition: Pipeline is empty and no more instructions in file
+        bool pipelineEmpty
+            = ifid.isEmpty()
+            && idex.isEmpty()
+            && exmem.isEmpty()
+            && memwb.isEmpty();
+
+        // emergency debug when a should-be-empty pipeline stage is stuck
+        // std::cout << pipelineEmpty << " " << ifid.isEmpty()<<" "<<idex.isEmpty()<<" "<<exmem.isEmpty()<<" "<<memwb.isEmpty()<<" \n";
+
+        if(pc / 4 >= program.size() && pipelineEmpty)
+            break;
+
     }
+
 
     // final output — always printed regardless of debug mode
     regFile.dump();
@@ -43,16 +62,21 @@ void Simulator::run() {
 // Each one is its own branch/ticket for the other team members
 
 void Simulator::stageIF() {
-    if (pc < (int)program.size()) {
-        ifid.instruction = program[pc];
+    if (pc/4 < (int)program.size()) {
+        ifid.instruction = program[pc/4];
+        ifid.valid = true;
         ifid.pc = pc;
-        pc++;
+        pc += 4;
     } else {
         ifid.instruction = 0;
+        ifid.valid = false;
     }
 }
 
 void Simulator::stageID() {
+    idex.valid = ifid.valid;
+    if(!idex.valid)
+        return;
 
     // Encoding has moved off the chip. Huzzah.
 
@@ -60,6 +84,7 @@ void Simulator::stageID() {
     // Filter out no-op outside of switch (just for less clutter)
     if(ifid.instruction == 0){
         idex = ID_EX();
+        idex.valid = true;  // NOP IS VALID!
         return;
     }
 
@@ -85,8 +110,19 @@ void Simulator::stageID() {
     
 
     // Here will be assigning values for signals based on relevant codes. 
-    // TODO.
     ControlUnit::setsignals(idex);
+
+
+    // Special jump logic: Leak in the Pipeline ~ Interdimensional Rift 
+    if(idex.opcode == 2){       // top 4 pc                 // word-addressing
+        uint32_t nextPC = ((ifid.pc + 4) & 0xF0000000) | (idex.jump_offset << 2);
+        pc = nextPC;
+        idex.valid = false; // Don't want next stage to receive "valid" as this is done.
+
+        // note. THIS ONLY WORKS because stageID() occurs before stageIF()
+        // causing the next stageID() to receive the instruction at nextPC
+        // if this EVER CHANGES, need to insert a NOP 
+    }
 
     // signal monitor. Commented out.
 
@@ -111,9 +147,14 @@ void Simulator::stageID() {
 }
 
 void Simulator::stageEX() {
+    exmem.valid = idex.valid;
+    if(!exmem.valid)
+        return;
+
     // double check nop
     if (idex.type == ID_EX::NOP) {
         exmem.clear();
+        exmem.valid = true;
         return;
     }
 
@@ -138,11 +179,18 @@ void Simulator::stageEX() {
 }
 
 void Simulator::stageMEM() {
+    memwb.valid = exmem.valid;
+    if(!memwb.valid)
+        return;
+
     // Person 4's job — read exmem fields
     // access memory if needed and fill in memwb fields
 }
 
 void Simulator::stageWB() {
+    if(!memwb.valid)    // stageWB runs before stageMEM so this works. if this ever changes, it will not work.
+        return;
+
     // Person 4's job — read memwb fields
     // write result back to register file
 }
