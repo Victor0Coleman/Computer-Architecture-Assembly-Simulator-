@@ -7,6 +7,7 @@
 #include "RegisterFile.h"
 #include "Memory.h"
 #include "PipelineRegisters.h"
+#include "ALU.h"
 
 class Simulator {
 public:
@@ -31,6 +32,9 @@ private:
 
     // program counter — tracks which instruction to fetch next
     int pc;
+
+    // the alu - for ex
+    ALU alu;
 
     // debug mode flag
     bool debug;
