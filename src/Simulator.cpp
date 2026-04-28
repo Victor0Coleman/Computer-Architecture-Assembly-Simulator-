@@ -226,15 +226,25 @@ void Simulator::stageWB() {
 
 void Simulator::printState() const {
     std::cout << "\n--- Pipeline Register State ---\n";
-    std::cout << "IF/ID:  " << ifid.instruction << " (PC=" << ifid.pc << ")\n";
-    std::cout << "ID/EX:  " << idex.opcode
-              << " rs=" << idex.rs
-              << " rt=" << idex.rt
-              << " rd=" << idex.rd << "\n";
+    std::cout << "IF/ID:  " << std::hex << ifid.instruction << std::dec << " (PC=" << ifid.pc << ")\n";
+    std::cout << "ID/EX:  " << " op=" << idex.opcode
+              << " rs=" << registerMap_reverse.at(idex.rs)
+              << " rt=" << registerMap_reverse.at(idex.rt)
+              << " rd=" << registerMap_reverse.at(idex.rd)
+              << " imm=" << idex.immediate
+              << " jump=" << idex.jump_offset
+              << "\n";
+
     std::cout << "EX/MEM: aluResult=" << exmem.aluResult
-              << " destReg=" << exmem.destReg << "\n";
+              << " destReg=" << registerMap_reverse.at(exmem.destReg)
+              << " writeData=" << exmem.writeData
+              << "\n";
+
     std::cout << "MEM/WB: aluResult=" << memwb.aluResult
-              << " readData=" << memwb.readData
-              << " destReg=" << memwb.destReg << "\n";
+            << " destReg=" << registerMap_reverse.at(memwb.destReg)
+            << " readData=" << memwb.readData
+            << "\n";
+
     regFile.dump();
+    memory.dump();
 }

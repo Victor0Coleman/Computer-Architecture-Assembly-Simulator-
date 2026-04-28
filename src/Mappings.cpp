@@ -57,3 +57,19 @@
         {"beq", 0x04},
         {"j", 0x02},
     };
+
+
+// ChatGPT helped create this absolute boilerplate (This just creates reverse-maps so that a "bimap" can be made, i.e. mapping to and from key and value)
+template <typename K, typename V>
+std::unordered_map<V, K> invertMap(const std::unordered_map<K, V>& input) {
+    std::unordered_map<V, K> output;
+    for (const auto& [key, value] : input) {
+        output[value] = key;
+    }
+    return output;
+}
+
+// Reverse maps
+const std::unordered_map<uint8_t, std::string> registerMap_reverse = invertMap(registerMap);
+const std::unordered_map<uint8_t, std::string> functMap_reverse    = invertMap(functMap);
+const std::unordered_map<uint8_t, std::string> opcodeMap_reverse   = invertMap(opcodeMap);
