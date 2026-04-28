@@ -21,7 +21,7 @@ void Simulator::run() {
 
     for (;;) {
         if (debug) {
-            std::cout << "\n========== CYCLE " << cycle << " ==========\n";
+            std::cout << "\n========== CYCLE " << cycle++ << " ==========\n";
         }
 
         // stages run backwards to avoid overwriting data
@@ -62,8 +62,9 @@ void Simulator::run() {
 // Each one is its own branch/ticket for the other team members
 
 void Simulator::stageIF() {
-    if (pc/4 < (int)program.size()) {
-        ifid.instruction = program[pc/4];
+    int wordPC = pc >> 2;
+    if (wordPC < (int)program.size()) {
+        ifid.instruction = program[wordPC];
         ifid.valid = true;
         ifid.pc = pc;
         pc += 4;
