@@ -191,11 +191,24 @@ void Simulator::stageEX() {
     }
 }
 
-void Simulator::stageMEM() {
+void Simulator::stageMEM(){
     memwb.valid = exmem.valid;
-    if(!memwb.valid)
+    if(!memwb.valid){ 
+        memwb.clear(); //clear if empty or not valid
         return;
+    }
+    //Memory interactions passes
+        memwb.aluResult = exmem.aluResult;  // Pass ALU result for lw (address)
+        memwb.regWrite = exmem.regWrite;    // Pass register write signal
+        memwb.memToReg = exmem.memToReg;    // Pass memory-to-register signal
+        memwb.destReg = exmem.destReg;      // Pass destination register
 
+    //MemOps
+    memwb.readData = 0; // default value for non-memory instructions
+    if(exmem.memRead){//LW
+        memwb.readData = memory.loadWord(exmem.aluResult);}
+    if(exmem.memWrite){//SW
+        memory.storeWord(exmem.aluResult, exmem.writeData);}
     // Person 4's job — read exmem fields
     // access memory if needed and fill in memwb fields
 }
@@ -203,6 +216,9 @@ void Simulator::stageMEM() {
 void Simulator::stageWB() {
     if(!memwb.valid)    // stageWB runs before stageMEM so this works. if this ever changes, it will not work.
         return;
+    if(memwb.regWrite){
+        regFile.write(memwb.destReg, memwb.readData ? memwb.readData : memwb.aluResult);
+    }
 
     // Person 4's job — read memwb fields
     // write result back to register file

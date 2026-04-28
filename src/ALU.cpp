@@ -10,6 +10,8 @@ ALUResult ALU::execute(Opcode op, int a, int b) {
 
     switch (op) {
         //currently not built to handle immediates on its own - can change
+        case Opcode::LW:
+        case Opcode::SW:
         case Opcode::ADD:
         case Opcode::ADDI:
             res.value = a + b;
