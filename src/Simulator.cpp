@@ -191,7 +191,7 @@ void Simulator::stageEX() {
         idex.clear();
 
         if (debug) {
-            std::cout << "[EX] BEQ taken → PC = " << pc << "\n";
+            std::cout << "[EX] BEQ taken -> PC = " << pc << "\n";
         }
     }
 }
