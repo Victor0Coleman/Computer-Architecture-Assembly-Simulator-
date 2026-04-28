@@ -100,6 +100,7 @@ void Simulator::stageID() {
     int16_t intermediate_immediate = ifid.instruction & 0x0000FFFF;
     idex.immediate = (int32_t)intermediate_immediate; // auto extend?
     idex.jump_offset = ifid.instruction & 0x03FFFFFF;
+    idex.pc = ifid.pc;
 
     idex.readData1 = regFile.read(idex.rs);
     idex.readData2 = regFile.read(idex.rt);
@@ -158,7 +159,11 @@ void Simulator::stageEX() {
 
     //grab b input and run
     int aluA = idex.readData1;
-    int aluB = idex.aluSrc ? idex.immediate : idex.readData2;
+    int aluB;
+    if (idex.ALUOp == Opcode::SLL || idex.ALUOp == Opcode::SRL)
+        aluB = idex.shamt;
+    else
+        aluB = idex.aluSrc ? idex.immediate : idex.readData2;
     
     ALUResult aluOut = alu.execute(idex.ALUOp, aluA, aluB);
 
