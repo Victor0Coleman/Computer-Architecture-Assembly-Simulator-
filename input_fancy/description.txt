@@ -1,0 +1,14 @@
+This folder is intended to store formatted text files, and code to generate such formatted text files from a given input file
+
+Formatted text file contains 3 items per line/instruction:
+1. MIPS instruction
+2. Hex representation
+3. Binary representation
+
+Code generating formatted text file is effectively another assembler, 
+except it preserves information about the original code instead of discarding 
+
+Additionally, stores to a file with same name (different extension) as original input, so as to not overwrite
+
+Note: Code file will exist in src directory, and logic will be called from main
+
