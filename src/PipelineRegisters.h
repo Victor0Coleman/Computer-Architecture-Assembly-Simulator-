@@ -59,7 +59,6 @@ struct ID_EX {
               rs(0), rt(0), rd(0), shamt(0), funct(0), opcode(0),
               regDst(false), aluSrc(false), memRead(false), memWrite(false),
               regWrite(false), memToReg(false), branch(false), ALUOp(Opcode::NOP) {}
-
     // add a clear
     void clear() { *this = ID_EX(); }
 
