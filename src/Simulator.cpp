@@ -21,7 +21,7 @@ void Simulator::run() {
 
     for (;;) {
         if (debug) {
-            std::cout << "\n============================== CYCLE " << cycle++ << " ============================================\n";
+            std::cout << "\n================================= CYCLE " << cycle++ << " =========================================\n";
         }
 
         // stages run backwards to avoid overwriting data
@@ -249,7 +249,7 @@ void Simulator::printState() const {
             << " destReg = " << registerMap_reverse.at(memwb.destReg)
             << " readData = " << memwb.readData
             << "\n";
-    std::cout << "-----------------------------------------------------------------------------------\n";
+        std::cout << "-----------------------------------------------------------------------------------\n";
     regFile.dump();
     memory.dump();
     //std::cout << "\n===================================================================================\n";

@@ -38,7 +38,7 @@ void RegisterFile::write(int regNum, int value) {
 }
 
 void RegisterFile::dump() const {
-    std::cout << "\n========================== Register File ==========================================\n";
+    std::cout << "\n=============================== Register File =====================================\n";
     for (int i = 0; i < 32; i++) {
         std::cout << "|";
         std::cout << std::setw(6) << regNames[i] << ": "
@@ -47,7 +47,6 @@ void RegisterFile::dump() const {
         if ((i + 1) % 4 == 0) std::cout << "\n";
         else {std:: cout << " "; 
         }
-        //std::cout << "|";
     }
     std::cout << "\n===================================================================================\n";
 }

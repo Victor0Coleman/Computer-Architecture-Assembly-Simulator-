@@ -24,7 +24,7 @@ void Memory::storeWord(int address, int value) {
 }
 
 void Memory::dump() const {
-    std::cout << "\n======================= Memory (non-zero locations) ===============================\n";
+   std::cout << "\n------------------------- Memory (non-zero locations) -----------------------------\n";
     if (mem.empty()) {
         std::cout << "  (empty)\n";
         return;
@@ -32,5 +32,5 @@ void Memory::dump() const {
     for (auto& [addr, val] : mem) {
         std::cout << "  [" << std::setw(6) << addr << "] = " << val << "\n";
     }
-    std::cout << "===================================================================================\n";
+    std::cout << "-----------------------------------------------------------------------------------\n";
 }
