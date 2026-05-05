@@ -21,7 +21,7 @@ void Simulator::run() {
 
     for (;;) {
         if (debug) {
-            std::cout << "\n========== CYCLE " << cycle++ << " ==========\n";
+            std::cout << "\n================================= CYCLE " << cycle++ << " =========================================\n";
         }
 
         // stages run backwards to avoid overwriting data
@@ -230,26 +230,28 @@ void Simulator::stageWB() {
 }
 
 void Simulator::printState() const {
-    std::cout << "\n--- Pipeline Register State ---\n";
-    std::cout << "IF/ID:  " << std::hex << ifid.instruction << std::dec << " (PC=" << ifid.pc << ")\n";
-    std::cout << "ID/EX:  " << " op=" << idex.opcode
-              << " rs=" << registerMap_reverse.at(idex.rs)
-              << " rt=" << registerMap_reverse.at(idex.rt)
-              << " rd=" << registerMap_reverse.at(idex.rd)
-              << " imm=" << idex.immediate
-              << " jump=" << idex.jump_offset
+    std::cout << "\n---------------------------- Pipeline Register State ------------------------------\n";
+    std::cout << "| IF/ID:  " << std::hex << ifid.instruction << std::dec << " (PC=" << ifid.pc << ")\n";
+    std::cout << "| ID/EX:  " << "op = " << idex.opcode
+              << " rs = " << registerMap_reverse.at(idex.rs)
+              << " rt = " << registerMap_reverse.at(idex.rt)
+              << " rd = " << registerMap_reverse.at(idex.rd)
+              << " imm = " << idex.immediate
+              << " jump = " << idex.jump_offset
               << "\n";
 
-    std::cout << "EX/MEM: aluResult=" << exmem.aluResult
-              << " destReg=" << registerMap_reverse.at(exmem.destReg)
-              << " writeData=" << exmem.writeData
+    std::cout << "| EX/MEM: aluResult = " << exmem.aluResult
+              << " destReg = " << registerMap_reverse.at(exmem.destReg)
+              << " writeData = " << exmem.writeData
               << "\n";
 
-    std::cout << "MEM/WB: aluResult=" << memwb.aluResult
-            << " destReg=" << registerMap_reverse.at(memwb.destReg)
-            << " readData=" << memwb.readData
+    std::cout << "| MEM/WB: aluResult = " << memwb.aluResult
+            << " destReg = " << registerMap_reverse.at(memwb.destReg)
+            << " readData = " << memwb.readData
             << "\n";
-
+        std::cout << "-----------------------------------------------------------------------------------\n";
     regFile.dump();
     memory.dump();
+    //std::cout << "\n===================================================================================\n";
+
 }
