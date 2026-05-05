@@ -1,7 +1,7 @@
 # Computer-Architecture-Assembly-Simulator-
 Computer Architecture Assembly Simulator Project: Team Members will develop a assembly simulator similar to MIps.
 *******************************************************************************************************************************
-Team Memebers: 
+Team Memebers: Victor Coleman, Nate Jones, Nicholas Krustchinsky, Hanna Little-Neuhaus
 
 Description:
 Develop an instruction-by-instruction simulator for a pipelined MIPS processor. The simulator
