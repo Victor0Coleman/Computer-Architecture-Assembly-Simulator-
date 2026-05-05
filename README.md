@@ -9,7 +9,7 @@ will execute instructions from the input assembly file one-by-one and display th
 file and memory after the program has finished execution.
 
 Simulator must implement the MIPS instructions listed in the table below.
-Opcode Description:
+Supported instructions:
 • ADD - signed integer addition
 • ADDI - add immediate
 • SUB - signed integer subtraction
@@ -48,21 +48,21 @@ These are all of the cpp files of our program (not including the header files as
 
 In order to run the program 
         Access src file cmd: cd src
-        Compilation of the files cmd: g++ -std=c++17 *.cpp -o simulator 
-        run cmd: ./main ../tests/input3.asm
-        debug cmd:./main ../tests/input3.asm -d
+        Compilation of the files cmd: g++ -std=c++17 *.cpp -o mips-sim 
+        run cmd: ./mips-sim ../tests/input3.asm
+        debug cmd:./mips-sim ../tests/input3.asm -d
 
  ********************************************************************************************************************************
- This Mips_Simulator is simplifed version of the Mars Assembly program thats based in C++ and it models the 5 pipeline stages: IF - isntruction fetch -> ID - instruction decode -> EX - Execute -> MEM - Memory -> WB - Write back
+ This Mips_Simulator is simplifed version of the Mars Assembly program thats based in C++ and it models the 5 pipeline stages: IF - instruction fetch -> ID - instruction decode -> EX - Execute -> MEM - Memory -> WB - Write back
 
  While also supporting a limited amount of Operations like:• 
 • ADD, ADDI, SUB, MUL, AND, OR, SLL, SRL, LW, SW, BEQ, J, Nop 
 
 What each file is responsible for
 • Alu.cpp - implements math and lgoic operation for each supported operation.
-• Assembler.cpp - Converts assembly to code to machine while making sure its 32 bits
+• Assembler.cpp - Wrapper for encoder, which tracks instruction address, labels, and removes comments.
+• Encoder.cpp -  Convert MIPS instructions to machine code.
 • ControlUnit.cpp - Generates signal during decode stage that turn turn off/on the that matches the instrsuction type being read.
-• Encoder.cpp -  Encodes instructions int o 32 buit binary format
 • Main.cpp -  Entry point for building and running the simaulteor
 • Mappings.cpp - Contains function mapping to regsiters 
 • Memoryc.cpp - Simulate memory with word aligned access
@@ -71,12 +71,9 @@ What each file is responsible for
 • Simulator.cpp - coordinates pipeline stages and system execution 
 
 
-Formatting.cpp - Formatted text file contains 3 items per line/instruction, 
-MIPS instruction, Hex representation, Binary representation. Additionally, stores 
-to a file with same name (different extension) as original input, so as to not overwrite
-
-Code generating formatted text file is effectively another assembler, 
-except it preserves information about the original code instead of discarding 
+Formatter.cpp - Writes each instruction to a file of the same name in MIPS/Hex/Binary representation. 
+These files can be found in the input_fancy folder of the project.
+Formatter is effectively just another assembler, except it preserves information about the original code instead of discarding.
 
 Build/run Instructions
 Compile all src files using cmd: g++ -std=c++17 *.cpp -o simulator
@@ -84,6 +81,8 @@ Then run any test of your choosing via cmd: ./main ../tests/input3.asm
 For debug mode run cmd: ./main ../tests/input3.asm -d
 
 Prepare an input assembly file containing valid instructions.
+If instructions (or rather, a line) is invalid, it will be turned into NOP.
+Manual insertion of NOP may be required to stall pipeline and prevent hazards from occurring.
 
 If debug mode is enabled in main.cpp, the simulator will print cycle-by-cycle pipeline states after execution, the simulator will also print results: Final register file contents.
 Non-zero memory contents
