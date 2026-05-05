@@ -46,11 +46,23 @@ These are all of the cpp files of our program (not including the header files as
 • RegisterFile.cpp
 • Simulator.cpp
 
-In order to run the program 
-        Access src file cmd: cd src
-        Compilation of the files cmd: g++ -std=c++17 *.cpp -o mips-sim 
-        run cmd: ./mips-sim ../tests/input3.asm
-        debug cmd:./mips-sim ../tests/input3.asm -d
+In order to compile the program,
+use commands (from directory Computer-Architecture-Assembly-Simulator-):
+
+        make
+
+        OR
+
+        g++ -std=c++17 src/*.cpp -o mips-sim
+
+To run the program:
+        ./mips-sim input-path [-d debug]
+ 
+        Input files are available in tests directory, e.g. to run input3.asm,
+        ./mips-sim tests/input3.asm
+
+        To run in debug mode, add argument -d at the end of command, e.g.
+        ./mips-sim tests/input3.asm -d
 
  ********************************************************************************************************************************
  This Mips_Simulator is simplifed version of the Mars Assembly program thats based in C++ and it models the 5 pipeline stages: IF - instruction fetch -> ID - instruction decode -> EX - Execute -> MEM - Memory -> WB - Write back
